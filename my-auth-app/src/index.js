@@ -36,7 +36,7 @@ app.use(
 
 app.get("/", async(req, res) => {
     if (!req.user) {
-        res.render("login", {message: "Please login to continue", messageClass: "alert-danger"});
+        res.render("login", {message: "Please login to continue", messageClass: "alert-error"});
         //res.redirect("/login?message=Please login to continue&messageClass=alert-danger");
 
       return;
@@ -55,7 +55,7 @@ app.get("/", async(req, res) => {
 app.get("/register", (req, res) => {
   res.render("signup", {
       message: "To register, please enter your personal data.",
-      messageClass: "alert-succes"
+      messageClass: "alert-null"
   });
 });
 
@@ -67,7 +67,7 @@ app.post("/register", async (req, res) => {
   if (users.find((user) => user.email === email)) {
     res.render("signup", {
       message: "User already registered.",
-      messageClass: "alert-danger",
+      messageClass: "alert-error",
     });
 
     return;
@@ -76,7 +76,7 @@ app.post("/register", async (req, res) => {
   if (password !== confirmPassword) {
     res.render("signup", {
       message: "Passwords does not match.",
-      messageClass: "alert-danger",
+      messageClass: "alert-error",
     });
 
     return;
@@ -86,9 +86,9 @@ app.post("/register", async (req, res) => {
 
   await pool.query(`INSERT INTO users (firstname, lastname, email, password) VALUES
                         ('${firstname}', '${lastname}', '${email}', '${hashedPassword}');`)
-    //res.redirect("/login");
-    res.redirect(
-      "/login?message=Registration Complete. Please login to continue.&messageClass=alert-succes");
+    res.render("login", {message: "Registration complete. Please login to continue", messageClass: "alert-success"});
+    // res.redirect(
+    //   "/login?message=Registration Complete. Please login to continue.&messageClass=alert-succes");
 });
 
 
@@ -104,7 +104,7 @@ app.get("/login", (req, res) => {
     // }
     res.render("login", {
       message: "To log in, please enter your email and password.",
-      messageClass: "alert-success",
+      messageClass: "alert-null",
     });
 });
 
@@ -121,7 +121,7 @@ app.post("/login", async (req, res) => {
   if (!user) {
     res.render("login", {
       message: "Invalid username or password",
-      messageClass: "alert-danger",
+      messageClass: "alert-error",
     });
 
     return;
@@ -139,14 +139,14 @@ app.get("/logout", (req, res) => {
     const authToken = req.cookies["AuthToken"];
     delete authTokens[authToken];
   res.clearCookie('AuthToken');
-  res.render("login", { message: "You are logout", messageClass: "alert-danger" });
+  res.render("login", { message: "You are logout", messageClass: "alert-error" });
     //res.redirect("/login?message=You are logout.&messageClass=alert-danger");
 });
 
 app.get("/new-schedule", async (req, res) => {
 
     if (!req.user) {
-      res.render("login", {message: "Please login to continue", messageClass: "alert-danger"});
+      res.render("login", {message: "Please login to continue", messageClass: "alert-error"});
       // res.redirect(
       //   "/login?message=Please login to continue&messageClass=alert-danger"
       // );
@@ -182,7 +182,7 @@ app.get("/user:id", async (req, res) => {
     if (!req.user) {
       res.render("login", {
         message: "Please login to continue",
-        messageClass: "alert-danger",
+        messageClass: "alert-error",
       });
       // res.redirect(
       //   "/login?message=Please login to continue&messageClass=alert-danger"
