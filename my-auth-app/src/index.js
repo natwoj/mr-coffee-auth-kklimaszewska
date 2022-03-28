@@ -4,8 +4,6 @@ const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const logic = require("./logic");
 const { Pool } = require("pg");
-const { displayDayName } = require("./logic");
-
 
 const app = express();
 const port = 3000;
@@ -38,8 +36,8 @@ app.use(
 
 app.get("/", async(req, res) => {
     if (!req.user) {
-        //res.redirect("/login");
-        res.redirect("/login?message=Please login to continue&messageClass=alert-danger");
+        res.render("login", {message: "Please login to continue", messageClass: "alert-danger"});
+        //res.redirect("/login?message=Please login to continue&messageClass=alert-danger");
 
       return;
     }
@@ -95,18 +93,19 @@ app.post("/register", async (req, res) => {
 
 
 app.get("/login", (req, res) => {
-    const message = req.query.message;
-    const messageClass = req.query.messageClass;
-    if (!message) {
-        res.render("login", {
-          message: "To log in, please enter your email and password.",
-          messageClass: "alert-success",
-        });
-        return;
-    }
+    // const message = req.query.message;
+    // const messageClass = req.query.messageClass;
+    // if (!message) {
+    //     res.render("login", {
+    //       message: "To log in, please enter your email and password.",
+    //       messageClass: "alert-success",
+    //     });
+    //     return;
+    // }
     res.render("login", {
-        message: message,
-        messageClass: messageClass});
+      message: "To log in, please enter your email and password.",
+      messageClass: "alert-success",
+    });
 });
 
 app.post("/login", async (req, res) => {
@@ -139,17 +138,18 @@ app.post("/login", async (req, res) => {
 app.get("/logout", (req, res) => {
     const authToken = req.cookies["AuthToken"];
     delete authTokens[authToken];
-    res.clearCookie('AuthToken');
-    res.redirect("/login?message=You are logout.&messageClass=alert-danger");
+  res.clearCookie('AuthToken');
+  res.render("login", { message: "You are logout", messageClass: "alert-danger" });
+    //res.redirect("/login?message=You are logout.&messageClass=alert-danger");
 });
 
 app.get("/new-schedule", async (req, res) => {
 
     if (!req.user) {
-      //res.redirect("/login");
-      res.redirect(
-        "/login?message=Please login to continue&messageClass=alert-danger"
-      );
+      res.render("login", {message: "Please login to continue", messageClass: "alert-danger"});
+      // res.redirect(
+      //   "/login?message=Please login to continue&messageClass=alert-danger"
+      // );
 
       return;
     }
@@ -180,10 +180,13 @@ app.post("/new-schedule", async (req, res) => {
 
 app.get("/user:id", async (req, res) => {
     if (!req.user) {
-      //res.redirect("/login");
-      res.redirect(
-        "/login?message=Please login to continue&messageClass=alert-danger"
-      );
+      res.render("login", {
+        message: "Please login to continue",
+        messageClass: "alert-danger",
+      });
+      // res.redirect(
+      //   "/login?message=Please login to continue&messageClass=alert-danger"
+      // );
 
       return;
     }
