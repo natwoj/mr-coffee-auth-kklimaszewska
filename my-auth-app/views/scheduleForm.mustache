@@ -23,9 +23,8 @@
         </div>
         <div>
             <form method="POST" enctype="application/x-www-form-urlencoded">
-                <select name="user_id" required>
-                <option value={{idNumber}}>{{firstname}} {{lastname}}</option>
-                </select>
+                <label><span>for {{firstname}} {{lastname}}</span></label>
+                <input type="hidden" name="user_id" required value={{idNumber}}>
                 <label>day</label>
                 <select name="day" required>
                     <option value=1>monday</option>
